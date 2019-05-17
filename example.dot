@@ -1,0 +1,7 @@
+nn {
+    Input -> z [net=linear];
+    z -> Output [net=copy];
+    Input [shape=28*28]
+    z [shape=100]
+    Output [shape=10 activation=softmax]
+}
