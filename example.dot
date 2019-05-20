@@ -5,3 +5,7 @@ nn {
     z [shape=100]
     Output [shape=10 activation=softmax]
 }
+
+hoge {
+    Input -> Output
+}
