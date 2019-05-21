@@ -1,6 +1,23 @@
-# dot2nn
+# dot2nn - Define your Neural Network with DOT
 
-## Examples
+`dot2nn` is a script to compile DOT language to Neural Network (NN) Definition code for various frameworks.
+(_TODO_: Supported frameworks are keras, pytorch, ...)
+
+## [DOT?](https://www.graphviz.org/doc/info/lang.html)
+
+DOT-like language
+
+_TODO_: Spec
+
+## Usage?
+
+_TODO_: Currently, the script doesn't write as a portable script. Please run by `python ./main.py ...`
+
+```sh
+dot2nn -T<type> < source.dot
+```
+
+## Examples of NN Definition?
 
 ```dot
 # A single sequential network
@@ -20,10 +37,9 @@ nn {
 ```dot
 # AutoEncoder
 encoder {
-    Input -> l1  # net=linear in default
-    l1 -> Output
+    Input -> h -> Output;  // net=linear in default, and edges can be write connectedly if the attributes are same
     Input [shape=28*28]
-    l1 [shape=100 activation=sigmoid]
+    h [shape=100 activation=sigmoid]
     Output [shape=64]  # activation in default
 }
 
