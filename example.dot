@@ -7,5 +7,5 @@ nn {
 }
 
 hoge {
-    Input -> Output
+    Input -> z -> Output [net=linear];
 }

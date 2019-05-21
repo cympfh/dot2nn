@@ -1,7 +1,7 @@
 import click
 
-from dot2nn.parser import parse
 from dot2nn.compile import compile
+from dot2nn.parser import parse
 
 
 @click.command()

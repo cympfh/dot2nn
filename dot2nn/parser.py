@@ -1,9 +1,9 @@
 """Dot-like language Parser"""
-from typing import List
+from typing import Any, List, Tuple
 
 import rply
 
-from dot2nn.ast import Edge, Graph, Node
+from dot2nn.ast import Edge, Graph, LongEdge, Node
 
 tokens = [
     ('IDENTIFIER', r'[a-zA-Z_][^()\[\]{}=\'"\s:;#]*'),
@@ -115,17 +115,23 @@ def element_edge(p) -> Edge:
     return p[0]
 
 
+@pg.production('element : longedge')
+def element_longedge(p) -> LongEdge:
+    """LongEdge is element"""
+    return p[0]
+
+
 @pg.production('node : IDENTIFIER')
 def node(p) -> Node:
     """A Node"""
     return Node(p[0].getstr())
 
 
-@pg.production('node : IDENTIFIER PAREN_SQUARE_LEFT attributes PAREN_SQUARE_RIGHT')
+@pg.production('node : node PAREN_SQUARE_LEFT attributes PAREN_SQUARE_RIGHT')
 def node_attribute(p) -> Node:
     """A Node with attributes"""
-    name, _, attributes, _ = p
-    return Node(name.getstr(), attributes=attributes)
+    u, _, attributes, _ = p
+    return Node(u.name, attributes=attributes)
 
 
 @pg.production('nodes : IDENTIFIER')
@@ -169,21 +175,47 @@ def edge(p) -> Edge:
     return Edge(source=u, target=v)
 
 
-@pg.production('edge : nodes ARROW nodes PAREN_SQUARE_LEFT attributes PAREN_SQUARE_RIGHT')
+@pg.production('edge : edge PAREN_SQUARE_LEFT attributes PAREN_SQUARE_RIGHT')
 def edge_attributes(p) -> Edge:
     """A Edge with attributes"""
-    u, _, v, _, attributes, _ = p
-    return Edge(source=u, target=v, attributes=attributes)
+    e, _, attributes, _ = p
+    return Edge(source=e.source, target=e.target, attributes=attributes)
+
+
+@pg.production('longedge : nodes ARROW nodes ARROW nodes')
+def longedge_base(p) -> LongEdge:
+    """A LongEdge
+
+    The long edges have 2 or more length
+
+    Example
+    -------
+    x -> y -> z
+    """
+    u, _, v, _, w = p
+    return LongEdge([u, v, w])
+
+
+@pg.production('longedge : longedge ARROW nodes')
+def longedge_recur(p) -> LongEdge:
+    le, _, u = p
+    return LongEdge(le.points + [u])
+
+
+@pg.production('longedge : longedge PAREN_SQUARE_LEFT attributes PAREN_SQUARE_RIGHT')
+def longedge_attribute(p) -> LongEdge:
+    le, _, attributes, _ = p
+    return LongEdge(le.points, attributes=attributes)
 
 
 @pg.production('attributes : ')
-def attributes_empty(p):
+def attributes_empty(p) -> List[Tuple[str, Any]]:
     """Empty Attributes"""
     return []
 
 
 @pg.production('attributes : attribute attributes')
-def attributes_single(p):
+def attributes_single(p) -> List[Tuple[str, Any]]:
     """Attributes
 
     space separated
@@ -193,7 +225,7 @@ def attributes_single(p):
 
 
 @pg.production('attribute : IDENTIFIER EQUAL value')
-def attribute(p):
+def attribute(p) -> List[Tuple[str, Any]]:
     """attribute definiution
 
     Example
