@@ -9,11 +9,17 @@ DOT-like language
 
 _TODO_: Spec
 
-## Usage?
+## Install & Usage?
 
-_TODO_: Currently, the script doesn't write as a portable script. Please run by `python ./main.py ...`
+Prerequires: `python3` and `pip`.
 
 ```sh
+# Install
+pip install git+https://github.com/cympfh/dot2nn
+```
+
+```sh
+# Run
 dot2nn -T<type> < source.dot
 ```
 
