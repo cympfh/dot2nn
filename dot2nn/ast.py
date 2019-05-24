@@ -5,9 +5,18 @@ from rply.token import BaseBox
 
 class Node(BaseBox):
 
-    def __init__(self, name: str, attributes=None):
+    def __init__(self, name: str, attributes={}):
         self.name = name
         self.attributes = attributes
+
+    def __eq__(self, right):
+        return self.name == right.name
+
+    def __ne__(self, right):
+        return self.name != right.name
+
+    def __hash__(self):
+        return self.name.__hash__()
 
     def __repr__(self):
         return f"Node(name={self.name} attributes={self.attributes})"
@@ -15,10 +24,16 @@ class Node(BaseBox):
 
 class Edge(BaseBox):
 
-    def __init__(self, source: List[Node], target: List[Node], attributes=[]):
+    def __init__(self, source: List[Node], target: List[Node], attributes={}):
         self.source = source
         self.target = target
         self.attributes = attributes
+
+    def __eq__(self, right):
+        return self.source == right.source and self.target == right.target
+
+    def __ne__(self, right):
+        return not self.__eq__(right)
 
     def __repr__(self):
         return f"Edge({self.source} -> {self.target} attributes={self.attributes})"
@@ -26,7 +41,7 @@ class Edge(BaseBox):
 
 class LongEdge(BaseBox):
 
-    def __init__(self, points: List[List[Node]], attributes=[]):
+    def __init__(self, points: List[List[Node]], attributes={}):
         self.points = points
         self.attributes = attributes
 

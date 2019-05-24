@@ -14,7 +14,7 @@ class DotCompile:
         if in_edge:
             return f"{context}__{node.name}"
         if node.attributes:
-            attr = ' '.join(f"{key}={self.value(value)}" for key, value in node.attributes)
+            attr = ' '.join(f"{key}={self.value(value)}" for key, value in node.attributes.items())
             return f"{context}__{node.name} [shape=record label=\"{{ {node.name} | {attr} }}\"]"
         return f"{context}__{node.name} [label=\"{node.name}\"]"
 
@@ -27,7 +27,7 @@ class DotCompile:
         x = self.node(us[0], context, True) if len(us) == 1 else self.nodes(us, context, True)
         y = self.node(vs[0], context, True) if len(vs) == 1 else self.nodes(vs, context, True)
         if edge.attributes:
-            attr = ' '.join(f"{key}={self.value(value)}" for key, value in edge.attributes)
+            attr = ' '.join(f"{key}={self.value(value)}" for key, value in edge.attributes.items())
             return f"{x} -> {y} [label=\"{attr}\"]"
         return f"{x} -> {y}"
 

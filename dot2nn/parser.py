@@ -131,7 +131,7 @@ def node(p) -> Node:
 def node_attribute(p) -> Node:
     """A Node with attributes"""
     u, _, attributes, _ = p
-    return Node(u.name, attributes=attributes)
+    return Node(u.name, attributes=dict(attributes))
 
 
 @pg.production('nodes : IDENTIFIER')
@@ -179,7 +179,7 @@ def edge(p) -> Edge:
 def edge_attributes(p) -> Edge:
     """A Edge with attributes"""
     e, _, attributes, _ = p
-    return Edge(source=e.source, target=e.target, attributes=attributes)
+    return Edge(source=e.source, target=e.target, attributes=dict(attributes))
 
 
 @pg.production('longedge : nodes ARROW nodes ARROW nodes')
@@ -205,7 +205,7 @@ def longedge_recur(p) -> LongEdge:
 @pg.production('longedge : longedge PAREN_SQUARE_LEFT attributes PAREN_SQUARE_RIGHT')
 def longedge_attribute(p) -> LongEdge:
     le, _, attributes, _ = p
-    return LongEdge(le.points, attributes=attributes)
+    return LongEdge(le.points, attributes=dict(attributes))
 
 
 @pg.production('attributes : ')

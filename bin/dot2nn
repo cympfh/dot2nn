@@ -9,7 +9,7 @@ from dot2nn.parser import parse
 @click.command()
 @click.option('-T', '--type', type=click.Choice(['dot', 'keras', 'pytorch']))
 def main(type):
-    print(compile(parse(' '.join(open('/dev/stdin', 'r').readlines())), type=type))
+    print(compile(parse(' '.join(open('/dev/stdin', 'r').readlines())), type))
 
 
 if __name__ == '__main__':
